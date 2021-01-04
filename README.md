@@ -1,76 +1,43 @@
-# FT-PING
+# FT_PING
 
 Recreate the well-known command 'ping' in C.
 
     make
     ./ft_ping [-v -h] target
 
-◦ getpid            =   pid_t getpid(void)
-                        -> Renvoie l'identifiant du processus appelant    
-◦ getuid            =   uid_t getuid(void)
-                        -> Retourne l'UID réel du processus appelant.    
+    -h : sweepincrsize : Specify the number of bytes to increment the size of ICMP payload after each sweep when sending sweeping pings. The default value is 1.
+    -v : Verbose output : ICMP packets other than ECHO_RESPONSE that are received are listed.
 
-◦ getaddrinfo       =   int getaddrinfo(const char *node, const char *service, const struct addrinfo *hints, struct addrinfo **res)   
-                        -> Renvoie une ou plusieurs structures addrinfo, chacune d'entre elles contenant une adresse Internet   
-                           qui puisse être indiquée dans un appel à bind(2) ou connect(2)   
+The ping utility uses the ICMP protocol's mandatory ECHO_REQUEST datagram to elicit an ICMP ECHO_RESPONSE from a host or gateway.
+ECHO_REQUEST datagrams pings have an IP and ICMP header, followed by a struct timeval and then an arbitrary number of pad bytes used to fill out the packet.
 
-                        struct addrinfo {   
-                            int              ai_flags;   
-                            int              ai_family;   
-                            int              ai_socktype;   
-                            int              ai_protocol;   
-                            size_t           ai_addrlen;   
-                            struct sockaddr *ai_addr;   
-                            char            *ai_canonname;   
-                            struct addrinfo *ai_next;   
-                        };   
-
-◦ gettimeofday      =   int gettimeofday(struct timeval *tv, struct timezone *tz)   
-
-◦ inet_ntop         =   const char *inet_ntop(int af, const void *src, char *dst, socklen_t cnt)  
-                        -> Convertir des adresses IPv4 et IPv6 sous forme binaire en texte   
-
-◦ inet_pton         =   int inet_pton(int af, const char * src, void *dst);  
-                        -> Créer une structure d'adresse réseau   
-
-◦ alarm             =   unsigned int alarm(unsigned int nb_sec);  
-                        -> Programmer un réveil pour l'émission d'un signal   
-◦ setsockopt        =    int setsockopt(int s, int level, int optname, const void *optval, socklen_t optlen);   
-                        -> setsockopt() manipulent les options associées à une socket
-
-◦ recvmsg           =   ssize_t recvmsg(int s, struct msghdr *msg, int flags);  
-                        -> recvmsg() est utilisé pour recevoir des messages depuis une socket sur une socket orientée connexion ou non (contrairement à recv)  
-                        -> L'appel recvmsg() utilise une structure msghdr pour minimiser le nombre de paramètres à fournir directement.  
-                    
-                    struct msghdr {
-                        void         *msg_name;       /* adresse optionnelle */   
-                        socklen_t     msg_namelen;    /* taille de l'adresse */   
-                        struct iovec *msg_iov;        /* tableau scatter/gather */   
-                        size_t        msg_iovlen;     /* # éléments dans msg_iov */   
-                        void         *msg_control;    /* métadonnées, voir ci-dessous */   
-                        socklen_t     msg_controllen; /* taille du tampon de métadonnées */   
-                        int           msg_flags;      /* attributs du message reçu */   
-                    };
-
-
-◦ sendto            =   ssize_t sendto(int s, const void *buf, size_t len, int flags, const struct sockaddr *to, socklen_t tolen);   
-
-◦ socket            =   int socket(int domain, int type, int protocol);    
-
-
-## Documentation (triée par qualité)
+## Documentation
 
 * Deep View
 
+    EN Wiki (Top) https://en.wikipedia.org/wiki/Ping_(networking_utility)
+
     https://openmaniak.com/ping.php    
     https://www.geeksforgeeks.org/ping-in-c/    
+    http://support.tenasys.com/INtimeHelp_6/util_ping.html  
     http://linux-ip.net/html/tools-ping.html    
     https://www.cisco.com/c/en/us/support/docs/ip/routing-information-protocol-rip/13730-ext-ping-trace.html    
     https://www.ionos.fr/digitalguide/serveur/outils/commande-ping/    
     https://linux.developpez.com/tutoriels/apprendre-unix-aller-plus-loin-ligne-commande/?page=communiquer    
 
+    Cisco Ping : https://www.cisco.com/c/en/us/support/docs/ios-nx-os-software/ios-software-releases-121-mainline/12778-ping-traceroute.html
+
 * Quick View
 
-    https://stevessmarthomeguide.com/ping-command-home-network-testing/    
-    https://phoenixnap.com/kb/linux-ping-command-examples    
-    https://www.geeksforgeeks.org/difference-between-ping-and-traceroute/?ref=rp    
+    ✅ &nbsp; https://stevessmarthomeguide.com/ping-command-home-network-testing/    
+    ✅ &nbsp; https://phoenixnap.com/kb/linux-ping-command-examples    
+    ✅ &nbsp; https://www.geeksforgeeks.org/difference-between-ping-and-traceroute/?ref=rp   
+
+## Rendu
+
+Vous devez gérer une IPv4 simple (adresse/hostname) comme paramètre du pro-gramme.
+Vous devez gérer le FQDN sans pour autant effectuer la résolution DNS dans leretour du paquet
+Vous devez être sous une VM avec un noyau Linux > 3.14
+Exception faite de la ligne RTT, le résultat devra avoir une indentation identiqueau ping réel
+Une différence de +/- 30ms est acceptable sur un paquet
+Vous avez le droit d’utiliser les fonctions de la famille printfainsi qu’une globale
